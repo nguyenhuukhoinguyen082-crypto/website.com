@@ -1,7 +1,0 @@
-[
-  { "flightNumber": "VN214", "from": "HAN", "to": "SGN", "aircraft": "A321neo", "departure": "08:15", "arrival": "10:20", "status": "on-time", "gate": "A12" },
-  { "flightNumber": "VN7", "from": "SGN", "to": "NRT", "aircraft": "B787-9", "departure": "23:55", "arrival": "07:10+1", "status": "boarding", "gate": "D3" },
-  { "flightNumber": "VN300", "from": "HAN", "to": "ICN", "aircraft": "A350-900", "departure": "13:40", "arrival": "20:05", "status": "delayed", "gate": "C7" },
-  { "flightNumber": "VN660", "from": "DAD", "to": "SIN", "aircraft": "A321neo", "departure": "16:00", "arrival": "19:30", "status": "on-time", "gate": "B4" },
-  { "flightNumber": "VN18", "from": "HAN", "to": "CDG", "aircraft": "A350-900", "departure": "00:45", "arrival": "07:15", "status": "on-time", "gate": "E1" }
-]

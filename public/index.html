@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vietnam Airlines Group | PTFS</title>
+<meta name="description" content="Sải cánh vươn cao — the official Vietnam Airlines-themed virtual airline flying Pilot Training Flight Simulator.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="index">
+
+<div id="header-slot"></div>
+
+<section class="hero">
+  <svg class="flight-path-svg" viewBox="0 0 1200 500" preserveAspectRatio="none" aria-hidden="true">
+    <path id="flightPath" class="flight-path-line" d="M -50 380 C 250 250, 500 470, 750 220 S 1150 60, 1300 120" />
+    <circle r="4" fill="#fff">
+      <animateMotion dur="9s" repeatCount="indefinite" rotate="auto">
+        <mpath href="#flightPath"/>
+      </animateMotion>
+    </circle>
+  </svg>
+  <div class="hero-inner">
+    <p class="eyebrow">Vietnam Airlines Group · PTFS Community</p>
+    <h1>Sải cánh vươn cao.<br>Wings that soar higher.</h1>
+    <p class="hero-sub">The flag carrier of Vietnam, reimagined for Pilot Training Flight Simulator. Book a seat, earn LotusMiles, and fly our network of virtual routes.</p>
+    <div class="hero-actions">
+      <a href="book.html" class="btn btn-primary">Book a Flight</a>
+      <a href="routes.html" class="btn btn-outline">Explore Routes</a>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <form class="search-card" onsubmit="event.preventDefault(); window.location.href='book.html';">
+    <div class="field">
+      <label for="from">From</label>
+      <select id="from"><option>Hanoi (HAN)</option><option>Ho Chi Minh City (SGN)</option><option>Da Nang (DAD)</option></select>
+    </div>
+    <div class="field">
+      <label for="to">To</label>
+      <select id="to"><option>Tokyo (NRT)</option><option>Seoul (ICN)</option><option>Singapore (SIN)</option><option>Paris (CDG)</option></select>
+    </div>
+    <div class="field">
+      <label for="date">Date</label>
+      <input type="date" id="date">
+    </div>
+    <div class="field">
+      <label for="cabin">Cabin</label>
+      <select id="cabin"><option>Economy</option><option>Premium Economy</option><option>Business</option></select>
+    </div>
+    <button type="submit" class="btn btn-dark">Search Flights</button>
+  </form>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow" style="color:var(--color-primary);">Our Fleet</p>
+      <h2>Modern aircraft, built for every route</h2>
+      <p>From regional hops to long-haul journeys across our global network.</p>
+    </div>
+    <div id="fleetTeaser" class="grid grid-4"></div>
+    <p style="margin-top:24px;"><a href="fleet.html" class="pill-badge">View full fleet →</a></p>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow" style="color:var(--color-primary);">Where We Fly</p>
+      <h2>A growing network across Asia, Europe & beyond</h2>
+    </div>
+    <div id="routesTeaser" class="grid grid-4"></div>
+    <p style="margin-top:24px;"><a href="routes.html" class="pill-badge">See full route map →</a></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="grid grid-2" style="align-items:center; gap:48px;">
+      <div>
+        <p class="eyebrow" style="color:var(--color-primary);">LotusMiles</p>
+        <h2>Earn miles every time you fly with us</h2>
+        <p>LotusMiles is our loyalty program — earn points on every flight and redeem them for cabin upgrades, priority boarding, and exclusive perks across Vietnam Airlines Group.</p>
+        <a href="loyalty.html" class="btn btn-dark">Learn about LotusMiles</a>
+      </div>
+      <div class="card">
+        <p class="tag tag-teal">Member Tiers</p>
+        <h3>Titan → Silver → Gold → Platinum</h3>
+        <p>Higher tiers unlock lounge access, seat upgrade priority, and bonus mile multipliers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow" style="color:var(--color-primary);">Latest</p>
+      <h2>News &amp; Announcements</h2>
+    </div>
+    <div id="newsTeaser" class="grid grid-3"></div>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+(async function () {
+  const fleet = await VNA_DATA.getFleet();
+  document.getElementById('fleetTeaser').innerHTML = fleet.slice(0, 4).map(a => `
+    <div class="card">
+      <img src="${a.image}" alt="${a.name}">
+      <p class="tag">${a.count} in fleet</p>
+      <h3>${a.name}</h3>
+      <p>${a.role} · Range ${a.range}</p>
+    </div>`).join('');
+
+  const routes = await VNA_DATA.getRoutes();
+  document.getElementById('routesTeaser').innerHTML = routes.slice(0, 8).map(r => `
+    <div class="card">
+      <p class="tag ${r.hub ? '' : 'tag-teal'}">${r.hub ? 'Hub' : 'Destination'}</p>
+      <h3>${r.code}</h3>
+      <p>${r.city}, ${r.country}</p>
+    </div>`).join('');
+
+  const news = await VNA_DATA.getNews();
+  document.getElementById('newsTeaser').innerHTML = news.map(n => `
+    <div class="card">
+      <p class="tag tag-teal">${n.tag}</p>
+      <h3>${n.title}</h3>
+      <p>${n.excerpt}</p>
+      <p style="font-size:0.8rem;color:var(--color-slate-light);">${n.date}</p>
+    </div>`).join('');
+})();
+</script>
+</body>
+</html>

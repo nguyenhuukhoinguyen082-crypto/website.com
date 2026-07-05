@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Routes — Vietnam Airlines Group | PTFS</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="routes">
+
+<div id="header-slot"></div>
+
+<section class="hero" style="padding:64px 0 90px;">
+  <div class="hero-inner">
+    <p class="eyebrow">Route Network</p>
+    <h1>Where we fly</h1>
+    <p class="hero-sub">Our virtual network spans hubs, regional connections, and long-haul destinations across the PTFS world.</p>
+    <div class="hero-actions">
+      <a href="https://www.vietnamairlines.com/vn/en/plan-book/timetable-routemap/worldwide-routemap" target="_blank" rel="noopener" class="btn btn-primary">Interactive Route Map ↗</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="data-note">Destinations below are synced from the route database maintained by staff.</p>
+    <div id="routeGrid" class="grid grid-4" style="margin-top:28px;"></div>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+(async function () {
+  const routes = await VNA_DATA.getRoutes();
+  document.getElementById('routeGrid').innerHTML = routes.map(r => `
+    <div class="card">
+      <p class="tag ${r.hub ? '' : 'tag-teal'}">${r.hub ? 'Hub Airport' : 'Destination'}</p>
+      <h3>${r.code}</h3>
+      <p>${r.city}, ${r.country}</p>
+    </div>`).join('');
+})();
+</script>
+</body>
+</html>

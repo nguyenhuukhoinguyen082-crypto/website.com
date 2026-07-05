@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deals — Vietnam Airlines Group | PTFS</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="deals">
+
+<div id="header-slot"></div>
+
+<section class="hero" style="padding:64px 0 90px;">
+  <div class="hero-inner">
+    <p class="eyebrow">Deals &amp; Promotions</p>
+    <h1>Fly for less, earn more</h1>
+    <p class="hero-sub">Current offers across LotusMiles, seat class passes, and community referrals.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div id="dealsGrid" class="grid grid-3"></div>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+(async function () {
+  const deals = await VNA_DATA.getDeals();
+  document.getElementById('dealsGrid').innerHTML = deals.map(d => `
+    <div class="card">
+      <p class="tag tag-teal">Expires ${d.expires}</p>
+      <h3>${d.title}</h3>
+      <p>${d.description}</p>
+      <p class="pill-badge">Code: ${d.code}</p>
+    </div>`).join('');
+})();
+</script>
+</body>
+</html>

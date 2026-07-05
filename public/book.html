@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Flight — Vietnam Airlines Group | PTFS</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="book">
+
+<div id="header-slot"></div>
+
+<section class="hero" style="padding:64px 0 90px;">
+  <div class="hero-inner">
+    <p class="eyebrow">Book a Flight</p>
+    <h1>Choose your route and cabin</h1>
+    <p class="hero-sub">Sign in with Discord to book — Business and Premium Economy require an active seat class pass tied to your server role.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <form class="search-card" style="margin-top:0;" id="bookingForm">
+      <div class="field">
+        <label for="bFrom">From</label>
+        <select id="bFrom"></select>
+      </div>
+      <div class="field">
+        <label for="bTo">To</label>
+        <select id="bTo"></select>
+      </div>
+      <div class="field">
+        <label for="bDate">Date</label>
+        <input type="date" id="bDate">
+      </div>
+      <div class="field">
+        <label for="bCabin">Cabin</label>
+        <select id="bCabin">
+          <option value="economy">Economy</option>
+          <option value="premiumEconomy">Premium Economy — requires pass</option>
+          <option value="business">Business — requires pass</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-dark">Search</button>
+    </form>
+
+    <div id="cabinNotice" class="data-note" style="margin-top:20px; display:none;"></div>
+
+    <div style="margin-top:32px;">
+      <h2 style="margin-bottom:16px;">Available Flights</h2>
+      <table id="resultsTable">
+        <thead>
+          <tr><th>Flight</th><th>Route</th><th>Aircraft</th><th>Departs</th><th>Arrives</th><th>Status</th><th></th></tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+(async function () {
+  const routes = await VNA_DATA.getRoutes();
+  const options = routes.map(r => `<option>${r.city} (${r.code})</option>`).join('');
+  document.getElementById('bFrom').innerHTML = options;
+  document.getElementById('bTo').innerHTML = options;
+
+  async function renderFlights() {
+    const flights = await VNA_DATA.getFlights();
+    document.getElementById('resultsBody').innerHTML = flights.map(f => `
+      <tr>
+        <td><strong>${f.flightNumber}</strong></td>
+        <td>${f.from} → ${f.to}</td>
+        <td>${f.aircraft}</td>
+        <td>${f.departure}</td>
+        <td>${f.arrival}</td>
+        <td><span class="status-pill status-${f.status}">${f.status.replace('-', ' ')}</span></td>
+        <td><a href="login.html" class="btn btn-primary" style="padding:8px 16px;font-size:0.8rem;">Select</a></td>
+      </tr>`).join('');
+  }
+  renderFlights();
+
+  const cabinSelect = document.getElementById('bCabin');
+  const notice = document.getElementById('cabinNotice');
+  function updateNotice() {
+    if (cabinSelect.value !== 'economy') {
+      notice.style.display = 'block';
+      notice.textContent = 'This cabin requires an active seat class pass linked to your Discord role. Sign in with Discord to check eligibility or purchase a pass.';
+    } else {
+      notice.style.display = 'none';
+    }
+  }
+  cabinSelect.addEventListener('change', updateNotice);
+  updateNotice();
+
+  document.getElementById('bookingForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    renderFlights();
+  });
+})();
+</script>
+</body>
+</html>

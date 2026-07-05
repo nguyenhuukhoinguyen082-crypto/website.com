@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signing in… — Vietnam Airlines Group | PTFS</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="login-callback">
+
+<div id="header-slot"></div>
+
+<section class="section" style="padding:100px 0;">
+  <div class="container center" style="max-width:480px;">
+    <h2>Signing you in…</h2>
+    <p id="statusText">Exchanging your Discord authorization code.</p>
+    <p class="data-note" style="text-align:left;">
+      This page receives the <code>?code=</code> query param from Discord. Exchange it for an access token
+      on your backend (Railway server), verify guild membership/roles for the connected server, then create
+      a session and redirect the user back into the site. Wire this up alongside your existing bot's Discord
+      OAuth handling since it already manages roles and member data.
+    </p>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const code = params.get('code');
+document.getElementById('statusText').textContent = code
+  ? `Received authorization code. Send it to your backend to complete sign-in.`
+  : `No authorization code found — please try signing in again.`;
+</script>
+</body>
+</html>

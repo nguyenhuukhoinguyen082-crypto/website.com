@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — Vietnam Airlines Group | PTFS</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="about">
+
+<div id="header-slot"></div>
+
+<section class="hero" style="padding:64px 0 90px;">
+  <div class="hero-inner">
+    <p class="eyebrow">About Us</p>
+    <h1>Sải cánh vươn cao.</h1>
+    <p class="hero-sub">Welcome to Vietnam Airlines — an airline based on a real-life carrier, operating on the Pilot Training Flight Simulator platform.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="grid grid-2" style="gap:48px;">
+      <div>
+        <h2>Our Story</h2>
+        <p>Vietnam Airlines was founded in 1956 and later established as a state-owned enterprise in April 1989. Vietnam Airlines is headquartered in Long Biên district, Hanoi, with hubs at Noi Bai International Airport in Hanoi and Tan Son Nhat International Airport in Ho Chi Minh City.</p>
+        <p>The airline flies 117 routes across 19 countries, excluding codeshared services. Vietnam Airlines is a member of SkyTeam and is the official flag carrier of Vietnam.</p>
+        <a href="https://www.vietnamairlines.com/vn/en/plan-book/timetable-routemap/worldwide-routemap" target="_blank" rel="noopener" class="btn btn-dark">Interactive Route Map ↗</a>
+      </div>
+      <div class="card">
+        <p class="tag tag-teal">At a Glance</p>
+        <table style="box-shadow:none;border:none;">
+          <tr><td><strong>Founded</strong></td><td>1956</td></tr>
+          <tr><td><strong>State enterprise since</strong></td><td>April 1989</td></tr>
+          <tr><td><strong>Headquarters</strong></td><td>Long Biên, Hanoi</td></tr>
+          <tr><td><strong>Hubs</strong></td><td>Noi Bai (HAN) · Tan Son Nhat (SGN)</td></tr>
+          <tr><td><strong>Network</strong></td><td>117 routes · 19 countries</td></tr>
+          <tr><td><strong>Alliance</strong></td><td>SkyTeam</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow" style="color:var(--color-primary);">Connect</p>
+      <h2>Our Socials</h2>
+      <p>Social accounts help us build and bring people to Vietnam Airlines and the PTFS community.</p>
+    </div>
+    <div class="grid grid-3">
+      <a href="index.html" class="card">
+        <p class="tag tag-teal">Website</p>
+        <h3>Vietnam Airlines Group | PTFS</h3>
+        <p>You're on it — explore booking, fleet, routes and more.</p>
+      </a>
+      <a href="https://www.youtube.com/@vnaptfs" target="_blank" rel="noopener" class="card">
+        <p class="tag">YouTube</p>
+        <h3>@vnaptfs</h3>
+        <p>Roleplay events, cabin tours, and flight footage from the community.</p>
+      </a>
+      <div class="card" id="discordAboutCard">
+        <p class="tag tag-teal">Discord</p>
+        <h3>Community Server</h3>
+        <p>Join staff, book crew shifts, and take part in roleplay events.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const card = document.getElementById('discordAboutCard');
+  if (card && window.VNA_CONFIG) {
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => window.open(window.VNA_CONFIG.discordInviteUrl, '_blank'));
+  }
+});
+</script>
+</body>
+</html>

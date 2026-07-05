@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check-in — Vietnam Airlines Group | PTFS</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="checkin">
+
+<div id="header-slot"></div>
+
+<section class="hero" style="padding:64px 0 90px;">
+  <div class="hero-inner">
+    <p class="eyebrow">Check-in</p>
+    <h1>Check in for your flight</h1>
+    <p class="hero-sub">Sign in with Discord and enter your booking reference to check in and get your boarding pass.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="card" style="max-width:480px;">
+      <div class="field" style="margin-bottom:16px;">
+        <label for="pnr">Booking Reference</label>
+        <input type="text" id="pnr" placeholder="e.g. VNA4X9K">
+      </div>
+      <div class="field" style="margin-bottom:20px;">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" placeholder="Your last name">
+      </div>
+      <a href="login.html" class="btn btn-primary btn-block">Sign in with Discord to check in</a>
+      <p class="data-note" style="margin-top:16px;">Check-in opens 24 hours before scheduled departure and pulls booking data from the same database your booking is stored in.</p>
+    </div>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flight Status — Vietnam Airlines Group | PTFS</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="status">
+
+<div id="header-slot"></div>
+
+<section class="hero" style="padding:64px 0 90px;">
+  <div class="hero-inner">
+    <p class="eyebrow">Flight Status</p>
+    <h1>Track your flight</h1>
+    <p class="hero-sub">Status updates are pushed live from the flight board maintained by the Discord bot.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="field" style="max-width:320px; margin-bottom:24px;">
+      <label for="flightSearch">Search by flight number</label>
+      <input type="text" id="flightSearch" placeholder="e.g. VN214">
+    </div>
+    <table>
+      <thead>
+        <tr><th>Flight</th><th>Route</th><th>Aircraft</th><th>Departs</th><th>Arrives</th><th>Gate</th><th>Status</th></tr>
+      </thead>
+      <tbody id="statusBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+(async function () {
+  const flights = await VNA_DATA.getFlights();
+  function render(list) {
+    document.getElementById('statusBody').innerHTML = list.map(f => `
+      <tr>
+        <td><strong>${f.flightNumber}</strong></td>
+        <td>${f.from} → ${f.to}</td>
+        <td>${f.aircraft}</td>
+        <td>${f.departure}</td>
+        <td>${f.arrival}</td>
+        <td>${f.gate}</td>
+        <td><span class="status-pill status-${f.status}">${f.status.replace('-', ' ')}</span></td>
+      </tr>`).join('') || '<tr><td colspan="7" class="empty-state">No matching flights.</td></tr>';
+  }
+  render(flights);
+  document.getElementById('flightSearch').addEventListener('input', (e) => {
+    const q = e.target.value.trim().toUpperCase();
+    render(flights.filter(f => f.flightNumber.toUpperCase().includes(q)));
+  });
+})();
+</script>
+</body>
+</html>

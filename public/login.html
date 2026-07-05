@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — Vietnam Airlines Group | PTFS</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="login">
+
+<div id="header-slot"></div>
+
+<section class="section" style="padding:100px 0;">
+  <div class="container" style="max-width:440px;">
+    <div class="card center" style="padding:40px 32px;">
+      <img src="https://i.postimg.cc/gJ9jc5xn/vna.jpg" alt="Vietnam Airlines Group" style="height:48px;margin-bottom:20px;">
+      <h2>Sign in to your account</h2>
+      <p>Use your Discord account to book flights, check LotusMiles balance, and access staff tools.</p>
+      <button id="discordLoginBtn" class="btn btn-dark btn-block" style="margin-top:12px;">
+        Continue with Discord
+      </button>
+      <p class="data-note" style="margin-top:24px; text-align:left;">
+        This button is wired to <code>VNA_CONFIG.discordOAuth</code> in <code>config.js</code>. Fill in your Discord app's client ID and redirect URI to activate it.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+document.getElementById('discordLoginBtn').addEventListener('click', () => {
+  const cfg = window.VNA_CONFIG.discordOAuth;
+  if (!cfg.clientId || cfg.clientId === 'YOUR_DISCORD_CLIENT_ID') {
+    alert('Discord OAuth is not configured yet. Add your client ID and redirect URI in assets/js/config.js.');
+    return;
+  }
+  const url = `https://discord.com/api/oauth2/authorize?client_id=${encodeURIComponent(cfg.clientId)}&redirect_uri=${encodeURIComponent(cfg.redirectUri)}&response_type=code&scope=${encodeURIComponent(cfg.scope)}`;
+  window.location.href = url;
+});
+</script>
+</body>
+</html>

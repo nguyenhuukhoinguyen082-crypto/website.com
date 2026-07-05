@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News — Vietnam Airlines Group | PTFS</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="news">
+
+<div id="header-slot"></div>
+
+<section class="hero" style="padding:64px 0 90px;">
+  <div class="hero-inner">
+    <p class="eyebrow">News</p>
+    <h1>Announcements &amp; Updates</h1>
+    <p class="hero-sub">The latest from Vietnam Airlines Group staff.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div id="newsGrid" class="grid grid-3"></div>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+(async function () {
+  const news = await VNA_DATA.getNews();
+  document.getElementById('newsGrid').innerHTML = news.map(n => `
+    <div class="card">
+      <p class="tag tag-teal">${n.tag}</p>
+      <h3>${n.title}</h3>
+      <p>${n.excerpt}</p>
+      <p style="font-size:0.8rem;color:var(--color-slate-light);">${n.date}</p>
+    </div>`).join('');
+})();
+</script>
+</body>
+</html>

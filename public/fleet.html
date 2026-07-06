@@ -59,10 +59,9 @@
         <h2>${a.name}</h2>
         <p>${a.role}</p>
         <div class="fleet-specs">
-          <div><div class="num">${a.seats.economy}</div><div class="lbl">Economy</div></div>
-          ${a.seats.premiumEconomy ? `<div><div class="num">${a.seats.premiumEconomy}</div><div class="lbl">Premium Econ.</div></div>` : ''}
-          <div><div class="num">${a.seats.business}</div><div class="lbl">Business</div></div>
-          <div><div class="num">${a.range}</div><div class="lbl">Range</div></div>
+          <div><div class="num">${a.capacity}</div><div class="lbl">Total Seats</div></div>
+          <div><div class="num">${a.hasBusiness ? 'Yes' : 'No'}</div><div class="lbl">Business Cabin</div></div>
+          <div><div class="num">${a.activeCount}/${a.count}</div><div class="lbl">Active</div></div>
         </div>
       </div>
     </div>`).join('');

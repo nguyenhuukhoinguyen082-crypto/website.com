@@ -121,7 +121,7 @@
       <img src="${a.image}" alt="${a.name}">
       <p class="tag">${a.count} in fleet</p>
       <h3>${a.name}</h3>
-      <p>${a.role} · Range ${a.range}</p>
+      <p>${a.role.slice(0, 110)}${a.role.length > 110 ? '…' : ''}</p>
     </div>`).join('');
 
   const routes = await VNA_DATA.getRoutes();

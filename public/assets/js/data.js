@@ -8,28 +8,6 @@
    the management website. If it's not enabled yet (or a Firebase
    read fails), it automatically falls back to the local mock JSON
    in /assets/data/ so the site still works while you're setting up.
-
-   DATABASE PATHS ASSUMED (adjust the .ref('...') paths below if your
-   bot uses different node names):
-     /fleet          -> array/object of aircraft
-     /routes         -> array/object of destinations
-     /flights        -> array/object of scheduled flights
-     /news           -> array/object of announcements
-     /deals          -> array/object of promotions
-
-   FIELD NAMES ASSUMED per record — rename the keys in the mapping
-   functions below (mapFleet, mapFlight, etc.) to match whatever your
-   bot actually stores if they differ.
-
-   TO ACTIVATE:
-     1. Fill in window.VNA_CONFIG.firebase in config.js (apiKey,
-        authDomain, databaseURL, projectId — from your Firebase
-        project settings, same project your bot uses).
-     2. Set firebase.enabled = true in config.js.
-     3. Make sure firebase-app-compat.js and
-        firebase-database-compat.js are loaded before this file
-        (they already are, on every page — see the <head> of any
-        .html file).
    ============================================================ */
 
 let _fbApp = null;
@@ -72,18 +50,31 @@ async function readNode(path, mockFile, mapFn) {
   return fetch(`assets/data/${mockFile}`).then(r => r.json());
 }
 
-// Normalizes a raw bot fleet record into the shape the site's templates expect.
-// Adjust the right-hand property names if your bot's fleet node uses different keys.
-function mapFleet(a) {
-  return {
-    id: a.id || a.type || a.name,
-    name: a.name || a.model || a.type,
-    role: a.role || a.description || '',
-    count: a.count ?? a.inService ?? a.quantity ?? 0,
-    seats: a.seats || { economy: a.economySeats || 0, premiumEconomy: a.premiumEconomySeats || 0, business: a.businessSeats || 0 },
-    range: a.range || '',
-    image: a.image || a.imageUrl || '',
-  };
+// Your fleet node stores INDIVIDUAL aircraft (each with its own tail number),
+// not aggregated aircraft types. Real fields, confirmed from your database:
+//   aircraft_type, created_at, description, display_name, full_registration,
+//   has_business, image_url, passenger_capacity, service_status, tail_registration
+// So getFleet groups those individual records by display_name and counts them.
+function groupFleet(records) {
+  const groups = {};
+  records.forEach(a => {
+    const key = a.display_name || a.aircraft_type || 'Unknown Aircraft';
+    if (!groups[key]) {
+      groups[key] = {
+        name: key,
+        role: a.description || '',
+        image: a.image_url || '',
+        capacity: a.passenger_capacity || 0,
+        hasBusiness: !!a.has_business,
+        aircraftType: a.aircraft_type || '',
+        count: 0,
+        activeCount: 0,
+      };
+    }
+    groups[key].count++;
+    if ((a.service_status || '').toLowerCase().includes('active')) groups[key].activeCount++;
+  });
+  return Object.values(groups);
 }
 
 function mapFlight(f) {
@@ -100,7 +91,19 @@ function mapFlight(f) {
 }
 
 const VNA_DATA = {
-  async getFleet() { return readNode('fleet', 'fleet.json', mapFleet); },
+  async getFleet() {
+    const db = getFirebaseDB();
+    if (db) {
+      try {
+        const snap = await db.ref('fleet').once('value');
+        const rows = snapToArray(snap);
+        if (rows.length) return groupFleet(rows);
+      } catch (e) {
+        console.warn('Firebase read failed for /fleet, using mock data:', e);
+      }
+    }
+    return fetch('assets/data/fleet.json').then(r => r.json());
+  },
   async getRoutes() { return readNode('routes', 'routes.json'); },
   async getFlights() { return readNode('flights', 'flights.json', mapFlight); },
   async getNews() { return readNode('news', 'news.json'); },

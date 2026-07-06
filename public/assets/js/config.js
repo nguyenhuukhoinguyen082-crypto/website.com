@@ -5,13 +5,13 @@
 
 window.VNA_CONFIG = {
   // Your community Discord invite (used in footer + nav "Discord Server" link)
-  discordInviteUrl: "https://discord.gg/YOUR_INVITE_CODE",
+  discordInviteUrl: "https://discord.gg/pFgPqSKwFp",
 
   // Discord OAuth2 app details — create an app at https://discord.com/developers/applications
   // and set its redirect URI to this site's /login-callback route.
   discordOAuth: {
-    clientId: "YOUR_DISCORD_CLIENT_ID",
-    redirectUri: "https://YOUR-DOMAIN.up.railway.app/login-callback.html",
+    clientId: "1498634996729122897",
+    redirectUri: "https://vietnamairlines.up.railway.app/login-callback.html",
     scope: "identify guilds.members.read",
   },
 

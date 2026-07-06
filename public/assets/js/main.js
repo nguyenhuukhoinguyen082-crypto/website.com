@@ -29,3 +29,26 @@ async function loadPartials() {
 }
 
 document.addEventListener('DOMContentLoaded', loadPartials);
+
+async function checkSession() {
+  const slot = document.getElementById('authSlot');
+  if (!slot) return;
+  try {
+    const res = await fetch('/api/session', { credentials: 'include' });
+    if (!res.ok) return; // not logged in — leave the Login button as-is
+    const data = await res.json();
+    slot.innerHTML = `
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-family:var(--font-display); font-weight:700; font-size:0.85rem; color:var(--color-primary);">
+          ${data.username}
+        </span>
+        <button id="logoutBtn" class="icon-btn-login" style="border:none; cursor:pointer;">Log out</button>
+      </div>`;
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+      window.location.href = '/index.html';
+    });
+  } catch (e) {
+    console.warn('Session check failed:', e);
+  }
+}

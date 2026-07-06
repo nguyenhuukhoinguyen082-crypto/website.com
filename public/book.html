@@ -6,6 +6,29 @@
 <title>Book a Flight — Vietnam Airlines Group | PTFS</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .steps { display: flex; gap: 8px; margin-bottom: 32px; }
+  .step-pill {
+    flex: 1; text-align: center; padding: 10px 8px; border-radius: 999px; background: var(--color-line);
+    font-family: var(--font-display); font-weight: 700; font-size: 0.8rem; color: var(--color-slate-light);
+  }
+  .step-pill.active { background: var(--color-primary); color: #fff; }
+  .step-pill.done { background: var(--color-primary-tint); color: var(--color-primary); }
+  .flight-card {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    background: #fff; border: 1px solid var(--color-line); border-radius: var(--radius-md); padding: 18px 20px; margin-bottom: 14px;
+  }
+  .flight-card:hover { box-shadow: var(--shadow-sm); }
+  .flight-route { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; }
+  .cabin-option {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    border: 1.5px solid var(--color-line); border-radius: var(--radius-md); padding: 18px 20px; margin-bottom: 14px; background: #fff;
+  }
+  .cabin-option.selected { border-color: var(--color-primary); background: var(--color-primary-tint); }
+  .cabin-option.locked { opacity: 0.65; }
+  .step-panel { display: none; }
+  .step-panel.active { display: block; }
+</style>
 </head>
 <body data-page="book">
 
@@ -14,96 +37,159 @@
 <section class="hero" style="padding:64px 0 90px;">
   <div class="hero-inner">
     <p class="eyebrow">Book a Flight</p>
-    <h1>Choose your route and cabin</h1>
-    <p class="hero-sub">Sign in with Discord to book — Business and Premium Economy require an active seat class pass tied to your server role.</p>
+    <h1>Book like you would with the bot</h1>
+    <p class="hero-sub">Search a route, pick your flight, choose a cabin, and confirm — mirroring the /book flow from our Discord bot.</p>
   </div>
 </section>
 
 <section class="section">
-  <div class="container">
-    <form class="search-card" style="margin-top:0;" id="bookingForm">
-      <div class="field">
-        <label for="bFrom">From</label>
-        <select id="bFrom"></select>
-      </div>
-      <div class="field">
-        <label for="bTo">To</label>
-        <select id="bTo"></select>
-      </div>
-      <div class="field">
-        <label for="bDate">Date</label>
-        <input type="date" id="bDate">
-      </div>
-      <div class="field">
-        <label for="bCabin">Cabin</label>
-        <select id="bCabin">
-          <option value="economy">Economy</option>
-          <option value="premiumEconomy">Premium Economy — requires pass</option>
-          <option value="business">Business — requires pass</option>
-        </select>
-      </div>
-      <button type="submit" class="btn btn-dark">Search</button>
-    </form>
+  <div class="container" style="max-width:820px;">
 
-    <div id="cabinNotice" class="data-note" style="margin-top:20px; display:none;"></div>
-
-    <div style="margin-top:32px;">
-      <h2 style="margin-bottom:16px;">Available Flights</h2>
-      <table id="resultsTable">
-        <thead>
-          <tr><th>Flight</th><th>Route</th><th>Aircraft</th><th>Departs</th><th>Arrives</th><th>Status</th><th></th></tr>
-        </thead>
-        <tbody id="resultsBody"></tbody>
-      </table>
+    <div class="steps">
+      <div class="step-pill" data-step="1">1. Search</div>
+      <div class="step-pill" data-step="2">2. Select Flight</div>
+      <div class="step-pill" data-step="3">3. Choose Cabin</div>
+      <div class="step-pill" data-step="4">4. Confirm</div>
     </div>
+
+    <!-- STEP 1: SEARCH -->
+    <div class="step-panel" id="panel-1">
+      <form class="search-card" style="margin-top:0;" id="searchForm">
+        <div class="field"><label for="bFrom">From</label><select id="bFrom"></select></div>
+        <div class="field"><label for="bTo">To</label><select id="bTo"></select></div>
+        <div class="field"><label for="bDate">Date</label><input type="date" id="bDate"></div>
+        <button type="submit" class="btn btn-dark">Search Flights</button>
+      </form>
+    </div>
+
+    <!-- STEP 2: SELECT FLIGHT -->
+    <div class="step-panel" id="panel-2">
+      <h3>Available Flights</h3>
+      <div id="flightResults"></div>
+      <button class="btn btn-outline" style="background:transparent;color:var(--color-primary);border:1.5px solid var(--color-primary);" onclick="goStep(1)">← Back to search</button>
+    </div>
+
+    <!-- STEP 3: CABIN -->
+    <div class="step-panel" id="panel-3">
+      <h3>Choose your cabin</h3>
+      <p id="selectedFlightSummary" class="data-note"></p>
+      <div id="cabinOptions"></div>
+      <div style="display:flex; gap:12px; margin-top:20px;">
+        <button class="btn btn-outline" style="background:transparent;color:var(--color-primary);border:1.5px solid var(--color-primary);" onclick="goStep(2)">← Back</button>
+        <button class="btn btn-dark" id="toConfirmBtn" disabled onclick="goStep(4)">Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: CONFIRM -->
+    <div class="step-panel" id="panel-4">
+      <h3>Confirm your booking</h3>
+      <div class="card" id="confirmSummary"></div>
+      <a href="login.html" class="btn btn-primary btn-block" style="margin-top:20px;">Sign in with Discord to confirm booking</a>
+      <p class="data-note" style="margin-top:14px;">Business and Premium Economy require an active seat class pass linked to your Discord role. If you don't have one yet, you can purchase a pass after signing in — just like the bot's booking flow.</p>
+    </div>
+
   </div>
 </section>
 
 <div id="footer-slot"></div>
 
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/main.js"></script>
 <script>
-(async function () {
+let state = { flights: [], routes: [], selectedFlight: null, selectedCabin: null };
+
+function goStep(n) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + n).classList.add('active');
+  document.querySelectorAll('.step-pill').forEach(p => {
+    const s = Number(p.dataset.step);
+    p.classList.toggle('active', s === n);
+    p.classList.toggle('done', s < n);
+  });
+}
+
+const CABINS = [
+  { key: 'economy', label: 'Economy', desc: 'Standard seating, open to everyone.', locked: false, miles: 1 },
+  { key: 'premiumEconomy', label: 'Premium Economy', desc: 'Extra legroom and priority boarding. Requires a Premium Economy pass.', locked: true, miles: 1.25 },
+  { key: 'business', label: 'Business', desc: 'Full lie-flat seating and lounge access. Requires a Business pass.', locked: true, miles: 1.5 },
+];
+
+(async function init() {
   const routes = await VNA_DATA.getRoutes();
+  state.routes = routes;
   const options = routes.map(r => `<option>${r.city} (${r.code})</option>`).join('');
   document.getElementById('bFrom').innerHTML = options;
   document.getElementById('bTo').innerHTML = options;
 
-  async function renderFlights() {
-    const flights = await VNA_DATA.getFlights();
-    document.getElementById('resultsBody').innerHTML = flights.map(f => `
-      <tr>
-        <td><strong>${f.flightNumber}</strong></td>
-        <td>${f.from} → ${f.to}</td>
-        <td>${f.aircraft}</td>
-        <td>${f.departure}</td>
-        <td>${f.arrival}</td>
-        <td><span class="status-pill status-${f.status}">${f.status.replace('-', ' ')}</span></td>
-        <td><a href="login.html" class="btn btn-primary" style="padding:8px 16px;font-size:0.8rem;">Select</a></td>
-      </tr>`).join('');
-  }
-  renderFlights();
-
-  const cabinSelect = document.getElementById('bCabin');
-  const notice = document.getElementById('cabinNotice');
-  function updateNotice() {
-    if (cabinSelect.value !== 'economy') {
-      notice.style.display = 'block';
-      notice.textContent = 'This cabin requires an active seat class pass linked to your Discord role. Sign in with Discord to check eligibility or purchase a pass.';
-    } else {
-      notice.style.display = 'none';
-    }
-  }
-  cabinSelect.addEventListener('change', updateNotice);
-  updateNotice();
-
-  document.getElementById('bookingForm').addEventListener('submit', (e) => {
+  document.getElementById('searchForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    renderFlights();
+    const flights = await VNA_DATA.getFlights();
+    state.flights = flights;
+    document.getElementById('flightResults').innerHTML = flights.map((f, idx) => `
+      <div class="flight-card">
+        <div>
+          <div class="flight-route">${f.from} → ${f.to}</div>
+          <div style="color:var(--color-slate-light); font-size:0.85rem;">${f.flightNumber} · ${f.aircraft} · Departs ${f.departure}</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span class="status-pill status-${f.status}">${f.status.replace('-', ' ')}</span>
+          <button class="btn btn-dark" style="padding:9px 18px;font-size:0.85rem;" onclick="selectFlight(${idx})">Select</button>
+        </div>
+      </div>`).join('');
+    goStep(2);
   });
+
+  goStep(1);
 })();
+
+function selectFlight(idx) {
+  state.selectedFlight = state.flights[idx];
+  const f = state.selectedFlight;
+  document.getElementById('selectedFlightSummary').textContent =
+    `${f.flightNumber} · ${f.from} → ${f.to} · Departs ${f.departure} on ${f.aircraft}`;
+
+  document.getElementById('cabinOptions').innerHTML = CABINS.map(c => `
+    <div class="cabin-option ${c.locked ? 'locked' : ''}" id="cabin-${c.key}" onclick="selectCabin('${c.key}')">
+      <div>
+        <strong>${c.label}</strong>
+        <p style="margin:4px 0 0;">${c.desc}</p>
+      </div>
+      <div style="text-align:right;">
+        <div class="pill-badge">${c.miles}x LotusMiles</div>
+        ${c.locked ? '<div style="font-size:0.75rem;color:var(--color-warn);margin-top:6px;">Pass required</div>' : ''}
+      </div>
+    </div>`).join('');
+
+  goStep(3);
+}
+
+function selectCabin(key) {
+  state.selectedCabin = CABINS.find(c => c.key === key);
+  document.querySelectorAll('.cabin-option').forEach(el => el.classList.remove('selected'));
+  document.getElementById('cabin-' + key).classList.add('selected');
+  document.getElementById('toConfirmBtn').disabled = false;
+}
+
+document.getElementById('panel-4');
+const origGoStep = goStep;
+window.goStep = function (n) {
+  origGoStep(n);
+  if (n === 4 && state.selectedFlight && state.selectedCabin) {
+    const f = state.selectedFlight, c = state.selectedCabin;
+    document.getElementById('confirmSummary').innerHTML = `
+      <p class="tag tag-teal">Booking Summary</p>
+      <h3>${f.flightNumber} — ${f.from} → ${f.to}</h3>
+      <p>${f.aircraft} · Departs ${f.departure} · Arrives ${f.arrival}</p>
+      <hr class="divider">
+      <p><strong>Cabin:</strong> ${c.label}</p>
+      <p><strong>LotusMiles earn rate:</strong> ${c.miles}x</p>
+      ${c.locked ? '<p style="color:var(--color-warn);"><strong>Note:</strong> this cabin requires an active seat class pass.</p>' : ''}
+    `;
+  }
+};
 </script>
 </body>
 </html>

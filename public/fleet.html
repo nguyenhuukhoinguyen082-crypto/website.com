@@ -6,6 +6,20 @@
 <title>Fleet — Vietnam Airlines Group | PTFS</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .fleet-row { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; padding: 56px 0; border-bottom: 1px solid var(--color-line); }
+  .fleet-row:last-child { border-bottom: none; }
+  .fleet-row.reverse .fleet-media { order: 2; }
+  .fleet-media img { width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md); display: block; }
+  .fleet-specs { display: flex; gap: 28px; margin-top: 20px; flex-wrap: wrap; }
+  .fleet-specs div { min-width: 110px; }
+  .fleet-specs .num { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; color: var(--color-primary); }
+  .fleet-specs .lbl { font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-slate-light); }
+  @media (max-width: 800px) {
+    .fleet-row, .fleet-row.reverse { grid-template-columns: 1fr; }
+    .fleet-row.reverse .fleet-media { order: 0; }
+  }
+</style>
 </head>
 <body data-page="fleet">
 
@@ -14,38 +28,43 @@
 <section class="hero" style="padding:64px 0 90px;">
   <div class="hero-inner">
     <p class="eyebrow">Our Fleet</p>
-    <h1>Built for every distance</h1>
-    <p class="hero-sub">Fleet data below is synced from the Vietnam Airlines Group management database.</p>
+    <h1>Our Fleet</h1>
+    <p class="hero-sub">This is all of the aircraft that we are currently operating at Vietnam Airlines.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <p class="data-note">Live fleet counts and seat configurations are managed from the staff dashboard and update automatically here.</p>
-    <div id="fleetGrid" class="grid grid-3" style="margin-top:28px;"></div>
+    <div id="fleetList"></div>
   </div>
 </section>
 
 <div id="footer-slot"></div>
 
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/main.js"></script>
 <script>
 (async function () {
   const fleet = await VNA_DATA.getFleet();
-  document.getElementById('fleetGrid').innerHTML = fleet.map(a => `
-    <div class="card">
-      <img src="${a.image}" alt="${a.name}">
-      <p class="tag">${a.count} aircraft in service</p>
-      <h3>${a.name}</h3>
-      <p>${a.role} · Range ${a.range}</p>
-      <hr class="divider" style="margin:14px 0;">
-      <table style="box-shadow:none;">
-        <tr><td>Economy</td><td>${a.seats.economy}</td></tr>
-        <tr><td>Premium Economy</td><td>${a.seats.premiumEconomy}</td></tr>
-        <tr><td>Business</td><td>${a.seats.business}</td></tr>
-      </table>
+  document.getElementById('fleetList').innerHTML = fleet.map((a, i) => `
+    <div class="fleet-row ${i % 2 === 1 ? 'reverse' : ''}">
+      <div class="fleet-media">
+        <img src="${a.image}" alt="${a.name}">
+      </div>
+      <div>
+        <p class="tag tag-teal">${a.count} in service</p>
+        <h2>${a.name}</h2>
+        <p>${a.role}</p>
+        <div class="fleet-specs">
+          <div><div class="num">${a.seats.economy}</div><div class="lbl">Economy</div></div>
+          ${a.seats.premiumEconomy ? `<div><div class="num">${a.seats.premiumEconomy}</div><div class="lbl">Premium Econ.</div></div>` : ''}
+          <div><div class="num">${a.seats.business}</div><div class="lbl">Business</div></div>
+          <div><div class="num">${a.range}</div><div class="lbl">Range</div></div>
+        </div>
+      </div>
     </div>`).join('');
 })();
 </script>

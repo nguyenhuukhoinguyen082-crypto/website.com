@@ -1,6 +1,38 @@
 [
-  { "id": "a321neo", "name": "Airbus A321neo", "role": "Short-haul Narrowbody", "count": 14, "seats": { "economy": 168, "premiumEconomy": 24, "business": 12 }, "range": "4,000 km", "image": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1200&auto=format&fit=crop" },
-  { "id": "a350-900", "name": "Airbus A350-900", "role": "Long-haul Widebody", "count": 8, "seats": { "economy": 264, "premiumEconomy": 35, "business": 29 }, "range": "13,900 km", "image": "https://images.unsplash.com/photo-1583396618422-3b0433c5794c?q=80&w=1200&auto=format&fit=crop" },
-  { "id": "b787-9", "name": "Boeing 787-9 Dreamliner", "role": "Long-haul Widebody", "count": 11, "seats": { "economy": 249, "premiumEconomy": 21, "business": 30 }, "range": "13,530 km", "image": "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1200&auto=format&fit=crop" },
-  { "id": "atr72", "name": "ATR 72-500", "role": "Regional Turboprop", "count": 6, "seats": { "economy": 68, "premiumEconomy": 0, "business": 0 }, "range": "1,300 km", "image": "https://images.unsplash.com/photo-1556388158-185d95e3ef5f?q=80&w=1200&auto=format&fit=crop" }
+  {
+    "id": "b787",
+    "name": "Boeing 787",
+    "role": "As one of the first B787 operators in South East Asia, the Dreamliner offers comfortable luxury seating for over 300 passengers to ensure the most enjoyable flight. VNA's B787 fleet now operates flights between airports in Vietnam as well as throughout Europe and North East Asia.",
+    "count": 11,
+    "seats": { "economy": 249, "premiumEconomy": 21, "business": 30 },
+    "range": "13,530 km",
+    "image": "https://i.postimg.cc/6QR10jGC/oni-chan.webp"
+  },
+  {
+    "id": "a350",
+    "name": "Airbus A350",
+    "role": "Vietnam Airlines is one of the first airlines in the world to introduce this new generation of luxury aircraft. The 305-seat A350 XWB promises passengers the quality, comfort and style as they travel from/to Vietnamese cities, or between Vietnam and Asian/European destinations.",
+    "count": 8,
+    "seats": { "economy": 259, "premiumEconomy": 21, "business": 25 },
+    "range": "13,900 km",
+    "image": "https://i.postimg.cc/1t6pN9qG/uh.jpg"
+  },
+  {
+    "id": "a320neo",
+    "name": "Airbus A320neo",
+    "role": "The A320neo aircraft fleet provides safe and convenient travel.",
+    "count": 10,
+    "seats": { "economy": 156, "premiumEconomy": 0, "business": 12 },
+    "range": "6,300 km",
+    "image": "https://i.postimg.cc/gk46F5PV/a615.webp"
+  },
+  {
+    "id": "a321",
+    "name": "Airbus A321",
+    "role": "The A321 aircraft fleet provides safe and convenient travel throughout Vietnam or between Vietnam and Southeast Asia/Northeast Asia region.",
+    "count": 14,
+    "seats": { "economy": 168, "premiumEconomy": 0, "business": 16 },
+    "range": "5,950 km",
+    "image": "https://i.postimg.cc/zG3bqf40/n5d0fsq.png"
+  }
 ]

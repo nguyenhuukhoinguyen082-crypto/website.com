@@ -5,13 +5,18 @@
 
 window.VNA_CONFIG = {
   // Your community Discord invite (used in footer + nav "Discord Server" link)
-  discordInviteUrl: "https://discord.gg/pFgPqSKwFp",
+  discordInviteUrl: "https://discord.gg/YOUR_INVITE_CODE",
 
   // Discord OAuth2 app details — create an app at https://discord.com/developers/applications
-  // and set its redirect URI to this site's /login-callback route.
+  // and set its redirect URI to this site's /login-callback.html route.
+  // clientId and redirectUri are safe to keep here (public, client-side values).
+  // The CLIENT SECRET, the GUILD ID for role checks, and this same redirect URI
+  // must ALSO be set as environment variables on Railway (server-side, never
+  // in this file): DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET,
+  // DISCORD_REDIRECT_URI, DISCORD_GUILD_ID. See README.md for details.
   discordOAuth: {
-    clientId: "1498634996729122897",
-    redirectUri: "https://vietnamairlines.up.railway.app/login-callback.html",
+    clientId: "YOUR_DISCORD_CLIENT_ID",
+    redirectUri: "https://YOUR-DOMAIN.up.railway.app/login-callback.html",
     scope: "identify guilds.members.read",
   },
 

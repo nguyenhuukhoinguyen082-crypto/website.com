@@ -91,17 +91,9 @@ function mapFlight(f) {
 }
 
 const VNA_DATA = {
+  // Fleet is intentionally static — kept in assets/data/fleet.json with your
+  // real aircraft names, images, and descriptions. Not synced from Firebase.
   async getFleet() {
-    const db = getFirebaseDB();
-    if (db) {
-      try {
-        const snap = await db.ref('fleet').once('value');
-        const rows = snapToArray(snap);
-        if (rows.length) return groupFleet(rows);
-      } catch (e) {
-        console.warn('Firebase read failed for /fleet, using mock data:', e);
-      }
-    }
     return fetch('assets/data/fleet.json').then(r => r.json());
   },
   async getRoutes() { return readNode('routes', 'routes.json'); },
